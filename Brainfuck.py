@@ -1,3 +1,6 @@
+import sys
+import readchar
+
 program = ""
 cursor = 0
 tape = [0] * 640000  # ought to be enough for anybody
@@ -42,10 +45,14 @@ def execute_instruction(instruction):
     elif instruction == ']':
         cursor = loopStarts.pop() - 1
     elif instruction == '.':
-        print(chr(tape[pointer]))
+        c = chr(tape[pointer])
+        print(c, end='')
+    elif instruction == ',':
+        c = readchar.readchar()
+        tape[pointer] = ord(c)
 
 
-filename = "hello_world.bf"
+filename = "examples/rot13.bf"
 file = open(filename, "r")
 program = file.read()
 
