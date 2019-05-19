@@ -17,18 +17,23 @@ def findMatchingBracket(startingPoint):
         instruction = program[searchCursor]
         if instruction == '[':
             innerLoopCount += 1
+        elif instruction == ']' and innerLoopCount > 0:
+            innerLoopCount -= 1
         elif instruction == ']':
-            if innerLoopCount == 0:
-                return searchCursor
-            else:
-                innerLoopCount += 1
+            return searchCursor
     return searchCursor
 
 
-def execute_instruction(instruction):
-    global pointer
-    global tape
-    global cursor
+if len(sys.argv) <= 1:
+    filename = "examples/hello_world.bf"
+else:
+    filename = sys.argv[1]
+
+file = open(filename, "r")
+program = file.read()
+
+while cursor < len(program):
+    instruction = program[cursor]
     if instruction == '+':
         tape[pointer] += 1
     elif instruction == '-':
@@ -46,16 +51,8 @@ def execute_instruction(instruction):
         cursor = loopStarts.pop() - 1
     elif instruction == '.':
         c = chr(tape[pointer])
-        print(c, end='')
+        print(c, end='', flush=True)
     elif instruction == ',':
         c = readchar.readchar()
         tape[pointer] = ord(c)
-
-
-filename = "examples/rot13.bf"
-file = open(filename, "r")
-program = file.read()
-
-while cursor < len(program):
-    execute_instruction(program[cursor])
     cursor += 1
